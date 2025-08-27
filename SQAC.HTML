@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Union Achievement Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #5e72e4;
+            --secondary-color: #825ee4;
+            --success-color: #2dce89;
+            --info-color: #11cdef;
+            --warning-color: #fb6340;
+            --danger-color: #f5365c;
+            --light-color: #f4f5f7;
+            --dark-color: #32325d;
+            --neutral-color: #8898aa;
+            --card-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            --hover-shadow: 0 20px 40px rgba(50, 50, 93, 0.15), 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fe;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 1.2rem 0;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: opacity 0.3s;
+            position: relative;
+        }
+        
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: white;
+            transition: width 0.3s;
+        }
+        
+        nav ul li a:hover {
+            opacity: 1;
+        }
+        
+        nav ul li a:hover:after {
+            width: 100%;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(94, 114, 228, 0.9), rgba(130, 94, 228, 0.9)), url('https://picsum.photos/seed/achievement/1200/500.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .section {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--dark-color);
+            font-size: 2rem;
+            font-weight: 600;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .filters {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 3rem;
+            transition: transform 0.3s;
+        }
+        
+        .filters:hover {
+            transform: translateY(-5px);
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        .filter-item {
+            flex: 1;
+            min-width: 220px;
+        }
+        
+        .filter-item label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .filter-item select,
+        .filter-item input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .filter-item select:focus,
+        .filter-item input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.1);
+            outline: none;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color) 0%, #26af74 100%);
+        }
+        
+        .btn-success:hover {
+            box-shadow: 0 7px 14px rgba(45, 206, 137, 0.2), 0 3px 6px rgba(0, 0, 0, 0.08);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .achievement-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .achievement-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .card-header {
+            padding: 1.2rem;
+            border-bottom: 1px solid #f4f5f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-category {
+            font-size: 0.85rem;
+            padding: 0.35rem 0.9rem;
+            border-radius: 20px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        
+        .category-external {
+            background: linear-gradient(135deg, var(--info-color) 0%, #0da5c0 100%);
+        }
+        
+        .category-internal {
+            background: linear-gradient(135deg, var(--success-color) 0%, #26af74 100%);
+        }
+        
+        .category-publication {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #fbb140 100%);
+        }
+        
+        .category-others {
+            background: linear-gradient(135deg, var(--neutral-color) 0%, #6c757d 100%);
+        }
+        
+        .card-body {
+            padding: 1.8rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        
+        .card-student {
+            font-size: 1rem;
+            color: var(--primary-color);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .card-student i {
+            margin-right: 0.6rem;
+            font-size: 1.1rem;
+        }
+        
+        .card-description {
+            margin-bottom: 1.5rem;
+            color: #525f7f;
+            flex-grow: 1;
+        }
+        
+        .card-footer {
+            padding: 1.2rem 1.8rem;
+            background-color: #f8f9fe;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--neutral-color);
+        }
+        
+        .card-date {
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-date i {
+            margin-right: 0.6rem;
+        }
+        
+        .card-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .card-link a i {
+            margin-left: 0.6rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            padding: 1.8rem;
+            border-bottom: 1px solid #f4f5f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.6rem;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--neutral-color);
+            transition: color 0.3s;
+        }
+        
+        .modal-close:hover {
+            color: var(--danger-color);
+        }
+        
+        .modal-body {
+            padding: 1.8rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.1);
+            outline: none;
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1.2rem 1.8rem;
+            border-radius: 8px;
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            z-index: 2000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s, transform 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .notification i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, var(--success-color) 0%, #26af74 100%);
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, var(--danger-color) 0%, #ec0c38 100%);
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.8rem;
+        }
+        
+        .stat-label {
+            color: var(--neutral-color);
+            font-weight: 500;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            color: var(--neutral-color);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: #e9ecef;
+        }
+        
+        .empty-state p {
+            font-size: 1.2rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 3rem;
+        }
+        
+        .loading i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            animation: spin 1.2s infinite linear;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1.2rem;
+            }
+            
+            nav ul li {
+                margin: 0 15px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .achievements-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-trophy"></i>
+                    Class Union Achievements
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" id="nav-home">Home</a></li>
+                        <li><a href="#" id="nav-students">Student Achievements</a></li>
+                        <li><a href="#" id="nav-add">Add Achievement</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Celebrating Our Success</h1>
+            <p>Showcasing the remarkable achievements of our class union members in various competitions, publications, and other endeavors.</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <!-- Home View -->
+        <section id="home-view" class="section">
+            <h2 class="section-title">Union Achievements Overview</h2>
+            
+            <div class="stats-container" id="stats-container">
+                <div class="loading"><i class="fas fa-spinner"></i></div>
+            </div>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <div class="filter-item">
+                        <label for="category-filter">Filter by Category</label>
+                        <select id="category-filter">
+                            <option value="">All Categories</option>
+                            <option value="External Contest">External Contest</option>
+                            <option value="Internal Contest">Internal Contest</option>
+                            <option value="Publication">Publication</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn" id="apply-filters">Apply Filters</button>
+                    <button class="btn btn-success" id="add-achievement-btn">Add New Achievement</button>
+                </div>
+            </div>
+            
+            <div id="achievements-container">
+                <div class="loading"><i class="fas fa-spinner"></i></div>
+            </div>
+        </section>
+
+        <!-- Student Achievements View -->
+        <section id="student-view" class="section" style="display: none;">
+            <h2 class="section-title">Student Achievements</h2>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <div class="filter-item">
+                        <label for="student-filter">Filter by Student</label>
+                        <select id="student-filter">
+                            <option value="">All Students</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label for="student-category-filter">Filter by Category</label>
+                        <select id="student-category-filter">
+                            <option value="">All Categories</option>
+                            <option value="External Contest">External Contest</option>
+                            <option value="Internal Contest">Internal Contest</option>
+                            <option value="Publication">Publication</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn" id="apply-student-filters">Apply Filters</button>
+                    <button class="btn btn-success" id="add-achievement-btn-student">Add New Achievement</button>
+                </div>
+            </div>
+            
+            <div id="student-achievements-container">
+                <div class="loading"><i class="fas fa-spinner"></i></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add Achievement Modal -->
+    <div id="add-achievement-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Achievement</h3>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="add-achievement-form">
+                    <div class="form-group">
+                        <label for="student-name">Student Name</label>
+                        <input type="text" id="student-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="achievement-title">Achievement Title</label>
+                        <input type="text" id="achievement-title" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="achievement-description">Description</label>
+                        <textarea id="achievement-description" class="form-control" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="achievement-category">Category</label>
+                        <select id="achievement-category" class="form-control" required>
+                            <option value="">Select a category</option>
+                            <option value="External Contest">External Contest</option>
+                            <option value="Internal Contest">Internal Contest</option>
+                            <option value="Publication">Publication</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="achievement-date">Date of Achievement</label>
+                        <input type="date" id="achievement-date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="achievement-link">Link to Proof (Optional)</label>
+                        <input type="url" id="achievement-link" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-success">Add Achievement</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Google Apps Script URL - replace with your deployed script URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOAud51kiz30sUIGsSWBtTojYkE-5ikQpRfL3-flnK7Rqx1t0cGVG4E3YYc9pH7habZw/exec'; // Replace with your actual URL
+        
+        // DOM Elements
+        const homeView = document.getElementById('home-view');
+        const studentView = document.getElementById('student-view');
+        const navHome = document.getElementById('nav-home');
+        const navStudents = document.getElementById('nav-students');
+        const navAdd = document.getElementById('nav-add');
+        const addAchievementBtn = document.getElementById('add-achievement-btn');
+        const addAchievementBtnStudent = document.getElementById('add-achievement-btn-student');
+        const addAchievementModal = document.getElementById('add-achievement-modal');
+        const modalClose = document.querySelector('.modal-close');
+        const addAchievementForm = document.getElementById('add-achievement-form');
+        const notification = document.getElementById('notification');
+        
+        // Navigation
+        navHome.addEventListener('click', (e) => {
+            e.preventDefault();
+            showHomeView();
+        });
+        
+        navStudents.addEventListener('click', (e) => {
+            e.preventDefault();
+            showStudentView();
+        });
+        
+        navAdd.addEventListener('click', (e) => {
+            e.preventDefault();
+            openAddAchievementModal();
+        });
+        
+        addAchievementBtn.addEventListener('click', openAddAchievementModal);
+        addAchievementBtnStudent.addEventListener('click', openAddAchievementModal);
+        
+        modalClose.addEventListener('click', closeAddAchievementModal);
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === addAchievementModal) {
+                closeAddAchievementModal();
+            }
+        });
+        
+        // Form submission
+        addAchievementForm.addEventListener('submit', handleAddAchievement);
+        
+        // Filters
+        document.getElementById('apply-filters').addEventListener('click', applyHomeFilters);
+        document.getElementById('apply-student-filters').addEventListener('click', applyStudentFilters);
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            showHomeView();
+            loadStudents();
+        });
+        
+        function showHomeView() {
+            homeView.style.display = 'block';
+            studentView.style.display = 'none';
+            loadStats();
+            loadAchievements();
+        }
+        
+        function showStudentView() {
+            homeView.style.display = 'none';
+            studentView.style.display = 'block';
+            loadStudentAchievements();
+        }
+        
+        function openAddAchievementModal() {
+            addAchievementModal.style.display = 'flex';
+        }
+        
+        function closeAddAchievementModal() {
+            addAchievementModal.style.display = 'none';
+            addAchievementForm.reset();
+        }
+        
+        function showNotification(message, type = 'success') {
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+            notification.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        async function fetchFromScript(params) {
+            try {
+                const url = new URL(SCRIPT_URL);
+                Object.keys(params).forEach(key => {
+                    url.searchParams.append(key, params[key]);
+                });
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                return data;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                showNotification('Error fetching data. Please try again.', 'error');
+                return { status: 'error', message: 'Network error' };
+            }
+        }
+        
+        async function loadStats() {
+            const statsContainer = document.getElementById('stats-container');
+            statsContainer.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i></div>';
+            
+            const result = await fetchFromScript({ action: 'getAchievements' });
+            
+            if (result.status === 'success') {
+                const achievements = result.data;
+                
+                // Calculate stats
+                const totalAchievements = achievements.length;
+                const externalContests = achievements.filter(a => a.category === 'External Contest').length;
+                const internalContests = achievements.filter(a => a.category === 'Internal Contest').length;
+                const publications = achievements.filter(a => a.category === 'Publication').length;
+                
+                // Get unique students
+                const uniqueStudents = [...new Set(achievements.map(a => a.studentName))];
+                
+                statsContainer.innerHTML = `
+                    <div class="stat-card">
+                        <div class="stat-value">${totalAchievements}</div>
+                        <div class="stat-label">Total Achievements</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${uniqueStudents.length}</div>
+                        <div class="stat-label">Students</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${externalContests}</div>
+                        <div class="stat-label">External Contests</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${publications}</div>
+                        <div class="stat-label">Publications</div>
+                    </div>
+                `;
+            } else {
+                statsContainer.innerHTML = '<div class="empty-state">Error loading statistics</div>';
+            }
+        }
+        
+        async function loadAchievements(category = '') {
+            const container = document.getElementById('achievements-container');
+            container.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i></div>';
+            
+            const params = { action: 'getAchievements' };
+            if (category) {
+                params.category = category;
+            }
+            
+            const result = await fetchFromScript(params);
+            
+            if (result.status === 'success') {
+                const achievements = result.data;
+                
+                if (achievements.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><i class="fas fa-trophy"></i><p>No achievements found. Add your first achievement!</p></div>';
+                    return;
+                }
+                
+                container.innerHTML = '<div class="achievements-grid"></div>';
+                const grid = container.querySelector('.achievements-grid');
+                
+                achievements.forEach(achievement => {
+                    grid.appendChild(createAchievementCard(achievement));
+                });
+            } else {
+                container.innerHTML = '<div class="empty-state">Error loading achievements</div>';
+            }
+        }
+        
+        async function loadStudentAchievements(studentName = '', category = '') {
+            const container = document.getElementById('student-achievements-container');
+            container.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i></div>';
+            
+            const params = { action: 'getAchievements' };
+            if (studentName) {
+                params.studentName = studentName;
+            }
+            if (category) {
+                params.category = category;
+            }
+            
+            const result = await fetchFromScript(params);
+            
+            if (result.status === 'success') {
+                const achievements = result.data;
+                
+                if (achievements.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><i class="fas fa-trophy"></i><p>No achievements found for the selected filters.</p></div>';
+                    return;
+                }
+                
+                container.innerHTML = '<div class="achievements-grid"></div>';
+                const grid = container.querySelector('.achievements-grid');
+                
+                achievements.forEach(achievement => {
+                    grid.appendChild(createAchievementCard(achievement));
+                });
+            } else {
+                container.innerHTML = '<div class="empty-state">Error loading achievements</div>';
+            }
+        }
+        
+        async function loadStudents() {
+            const result = await fetchFromScript({ action: 'getStudents' });
+            
+            if (result.status === 'success') {
+                const students = result.data;
+                const studentFilter = document.getElementById('student-filter');
+                
+                // Clear existing options except "All Students"
+                while (studentFilter.options.length > 1) {
+                    studentFilter.remove(1);
+                }
+                
+                // Add student options
+                students.forEach(student => {
+                    const option = document.createElement('option');
+                    option.value = student;
+                    option.textContent = student;
+                    studentFilter.appendChild(option);
+                });
+            }
+        }
+        
+        function createAchievementCard(achievement) {
+            const card = document.createElement('div');
+            card.className = 'achievement-card';
+            
+            const categoryClass = `category-${achievement.category.toLowerCase().replace(' ', '-')}`;
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <span class="card-category ${categoryClass}">${achievement.category}</span>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">${achievement.title}</h3>
+                    <div class="card-student">
+                        <i class="fas fa-user"></i> ${achievement.studentName}
+                    </div>
+                    <p class="card-description">${achievement.description}</p>
+                </div>
+                <div class="card-footer">
+                    <div class="card-date">
+                        <i class="fas fa-calendar"></i> ${formatDate(achievement.date)}
+                    </div>
+                    ${achievement.link ? `
+                        <div class="card-link">
+                            <a href="${achievement.link}" target="_blank">View Proof <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+        
+        function applyHomeFilters() {
+            const category = document.getElementById('category-filter').value;
+            loadAchievements(category);
+        }
+        
+        function applyStudentFilters() {
+            const studentName = document.getElementById('student-filter').value;
+            const category = document.getElementById('student-category-filter').value;
+            loadStudentAchievements(studentName, category);
+        }
+        
+        async function handleAddAchievement(e) {
+            e.preventDefault();
+            
+            const studentName = document.getElementById('student-name').value;
+            const title = document.getElementById('achievement-title').value;
+            const description = document.getElementById('achievement-description').value;
+            const category = document.getElementById('achievement-category').value;
+            const date = document.getElementById('achievement-date').value;
+            const link = document.getElementById('achievement-link').value;
+            
+            const result = await fetchFromScript({
+                action: 'addAchievement',
+                studentName,
+                title,
+                description,
+                category,
+                date,
+                link
+            });
+            
+            if (result.status === 'success') {
+                showNotification('Achievement added successfully!');
+                
+                // Close the modal immediately after showing the notification
+                setTimeout(() => {
+                    closeAddAchievementModal();
+                    
+                    // Refresh data based on current view
+                    if (homeView.style.display !== 'none') {
+                        loadStats();
+                        loadAchievements();
+                    } else {
+                        loadStudentAchievements();
+                    }
+                    
+                    // Reload students list in case new student was added
+                    loadStudents();
+                }, 1000); // Small delay to ensure notification is visible
+            } else {
+                showNotification('Error adding achievement. Please try again.', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
